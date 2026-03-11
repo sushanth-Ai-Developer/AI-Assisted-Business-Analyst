@@ -24,11 +24,11 @@ const generateExcelBase64 = (sheetsData: SheetData): string => {
 };
 
 export const generateProductArchitecture = async (brdText: string): Promise<GeneratedOutput> => {
-    // Vite's 'define' replaces these exact strings
-    const apiKey = process.env.VITE_API_KEY || process.env.GEMINI_API_KEY;
+    // Check multiple possible key names for maximum compatibility
+    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.VITE_API_KEY || process.env.VITE_API_KEY_BSA || process.env.GEMINI_API_KEY;
     
     if (!apiKey) {
-        throw new Error("API Key not found. Please set VITE_API_KEY or GEMINI_API_KEY in Settings.");
+        throw new Error("API Key not found. Please set VITE_GEMINI_API_KEY, VITE_API_KEY, or VITE_API_KEY_BSA in Settings.");
     }
     const ai = new GoogleGenAI({ apiKey });
 

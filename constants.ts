@@ -146,4 +146,49 @@ You MUST generate syntactically PERFECT Mermaid.js (v10) diagrams. Follow these 
     -   Do NOT include any text before or after the YAML content.
     -   Use proper indentation (2 spaces).
     -   Ensure all referenced schemas exist.
+    -   Ensure all referenced schemas exist.
+`;
+
+export const SAMPLE_BRD = `
+# Business Requirements Document: EcoTrack - Personal Carbon Footprint Tracker
+
+## 1. Executive Summary
+EcoTrack is a mobile and web application designed to help individuals track, understand, and reduce their daily carbon footprint. The goal is to gamify environmental consciousness and provide actionable insights for a sustainable lifestyle.
+
+## 2. Target Audience
+- Environmentally conscious individuals.
+- Students and young professionals.
+- Organizations looking to promote sustainability among employees.
+
+## 3. Functional Requirements
+
+### 3.1 User Management
+- **Registration & Login**: Users must be able to create an account using email/password or social logins (Google, Apple).
+- **Profile Management**: Users can set their location, dietary preferences, and primary mode of transport.
+
+### 3.2 Activity Tracking
+- **Daily Input**: Users can log daily activities across three categories:
+    - **Transport**: Distance traveled, vehicle type (electric, petrol, bike, public transit).
+    - **Diet**: Type of meals (vegan, vegetarian, meat-based).
+    - **Energy**: Household electricity and gas usage (manual entry or bill upload).
+- **Automated Tracking**: Integration with Google Maps API to automatically suggest transport logs based on location history.
+
+### 3.3 Analytics & Insights
+- **Dashboard**: Real-time visualization of daily, weekly, and monthly carbon emissions.
+- **Peer Comparison**: Anonymous comparison of footprint with users in similar demographics/locations.
+- **Reduction Tips**: AI-generated suggestions to reduce footprint based on user habits (e.g., "Switching to a bike for your 2km commute could save 5kg of CO2 this week").
+
+### 3.4 Gamification & Community
+- **Challenges**: Monthly community challenges (e.g., "Meatless March").
+- **Badges**: Users earn badges for milestones (e.g., "100km cycled", "1 Month Meat-Free").
+- **Leaderboards**: Local and global leaderboards for top reducers.
+
+## 4. Non-Functional Requirements
+- **Performance**: Dashboard should load in under 2 seconds.
+- **Privacy**: User data must be encrypted; location history must be opt-in only.
+- **Scalability**: Support up to 100,000 concurrent users.
+
+## 5. API Requirements
+- RESTful API for all mobile app interactions.
+- Integration with OpenWeatherMap for local environmental impact data.
 `;

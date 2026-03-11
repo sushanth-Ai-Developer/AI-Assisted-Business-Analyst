@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 import { UploadIcon } from './icons/UploadIcon';
+import { SAMPLE_BRD } from '../constants';
 
 // Set worker source for pdf.js to work correctly from CDN
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://esm.sh/pdfjs-dist@4.5.136/build/pdf.worker.mjs`;
@@ -68,14 +69,22 @@ const BrdInput: React.FC<BrdInputProps> = ({ value, onTextChange, onGenerate, is
         <label htmlFor="brd-input" className="block text-lg font-semibold text-slate-800">
           1. Provide Business Requirements
         </label>
-        {value && (
+        <div className="flex items-center space-x-3">
           <button 
-            onClick={() => onTextChange('')}
-            className="text-xs text-slate-500 hover:text-red-500 transition-colors"
+            onClick={() => onTextChange(SAMPLE_BRD.trim())}
+            className="text-xs px-2 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded hover:bg-blue-100 transition-colors"
           >
-            Clear Text
+            Try Sample BRD
           </button>
-        )}
+          {value && (
+            <button 
+              onClick={() => onTextChange('')}
+              className="text-xs text-slate-500 hover:text-red-500 transition-colors"
+            >
+              Clear Text
+            </button>
+          )}
+        </div>
       </div>
       <textarea
         id="brd-input"

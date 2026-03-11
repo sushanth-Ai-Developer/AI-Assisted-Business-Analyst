@@ -23,9 +23,13 @@ export const Welcome: React.FC = () => (
                 </p>
                 <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
                     <p className="font-bold mb-1">⚠️ Important Security Note</p>
-                    <p>
+                    <p className="mb-2">
                         Please do not upload confidential, sensitive, personal, financial, or production documents. 
                         Data uploaded here may not be fully secured or intended for real business use.
+                    </p>
+                    <p className="font-bold mb-1">🔑 API Key Setup</p>
+                    <p>
+                        To use this app, please add your Gemini API key in the <strong>Settings</strong> menu as <code>VITE_GEMINI_API_KEY</code>.
                     </p>
                 </div>
                 <p className="text-sm italic">
