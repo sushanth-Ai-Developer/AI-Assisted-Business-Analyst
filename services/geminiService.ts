@@ -100,11 +100,31 @@ export const generateProductArchitecture = async (brdText: string): Promise<Gene
 
         return parsedData;
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error calling Gemini API:", error);
-        if (error instanceof Error) {
-            throw new Error(`Gemini API Error: ${error.message}`);
+        
+        let message = "An unknown error occurred while communicating with the Gemini API.";
+        
+        if (error?.message) {
+            message = error.message;
+            // The Gemini SDK often returns a stringified JSON for 400/403 errors
+            try {
+                const jsonStart = message.indexOf('{');
+                if (jsonStart !== -1) {
+                    const jsonPart = message.substring(jsonStart);
+                    const parsed = JSON.parse(jsonPart);
+                    if (parsed?.error?.message) {
+                        message = parsed.error.message;
+                    } else if (parsed?.[0]?.error?.message) {
+                        message = parsed[0].error.message;
+                    }
+                }
+            } catch (e) {
+                // If parsing fails, we keep the original message but clean it up
+                message = message.replace(/^Gemini API Error: /i, '');
+            }
         }
-        throw new Error("An unknown error occurred while communicating with the Gemini API.");
+        
+        throw new Error(message);
     }
 };
