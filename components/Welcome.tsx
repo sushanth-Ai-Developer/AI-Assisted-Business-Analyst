@@ -27,10 +27,6 @@ export const Welcome: React.FC = () => (
                         Please do not upload confidential, sensitive, personal, financial, or production documents. 
                         Data uploaded here may not be fully secured or intended for real business use.
                     </p>
-                    <p className="font-bold mb-1">🔑 API Key Setup</p>
-                    <p>
-                        To use this app, please add your Gemini API key in the <strong>Settings</strong> menu as <code>VITE_GEMINI_API_KEY</code>.
-                    </p>
                 </div>
                 <p className="text-sm italic">
                     For testing and evaluation, please use only the sample files and test data provided by Sushanth.
