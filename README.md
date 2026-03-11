@@ -90,13 +90,13 @@ These files help reviewers understand the expected input format and quickly vali
 
 ### Sample Files
 
-- `samples/brd/sample_brd_1.pdf`
-- `samples/brd/sample_brd_2.docx`
+- `Sample_BRD_Funds_Transfer_v1.0.pdf`
+- `Sample_BRD_AI Receipt Inventory Manager.pdf`
 
 ### How to Use the Sample Files
 
 1. Launch the application
-2. Upload any file from the `samples/brd/` folder
+2. Upload any file 
 3. Click **Generate**
 4. Review the generated outputs
 
