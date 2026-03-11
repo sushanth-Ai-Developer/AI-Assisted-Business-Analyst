@@ -1,0 +1,6 @@
+{
+  "name": "AI-Assisted Business Analyst",
+  "description": "Converts BRD/business inputs into user stories, diagrams, and API specs. Developed by Sushanth to demonstrate AI-assisted business analysis capabilities.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
