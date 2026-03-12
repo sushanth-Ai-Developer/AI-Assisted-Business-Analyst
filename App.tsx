@@ -1,12 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { GeneratedOutput } from './types';
-import { generateProductArchitecture } from './services/geminiService';
 import BrdInput from './components/BrdInput';
 import { LogoIcon } from './components/icons/LogoIcon';
 import ProgressIndicator from './components/ProgressIndicator';
 import DashboardLayout from './components/DashboardLayout';
 import { Welcome } from './components/Welcome';
-
+import { BrdAgentOrchestrator } from './src/agent/brdAgentOrchestrator';
+import { createInitialState } from './src/agent/workflowState';
+import { WorkflowState } from './src/agent/schema';
+import AgentLogView from './src/components/AgentLogView';
 
 type GenerationStatus = 'idle' | 'analyzing' | 'success' | 'error';
 
@@ -16,6 +18,7 @@ const App: React.FC = () => {
   const [status, setStatus] = useState<GenerationStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [isTakingLong, setIsTakingLong] = useState(false);
+  const [agentState, setAgentState] = useState<WorkflowState | null>(null);
 
   const handleGenerate = useCallback(async () => {
     if (!brdText.trim()) {
@@ -29,13 +32,31 @@ const App: React.FC = () => {
 
     const longTimer = setTimeout(() => {
       setIsTakingLong(true);
-    }, 30000); // 30 seconds
+    }, 45000); // 45 seconds for agentic flow
 
     try {
-      const result = await generateProductArchitecture(brdText);
+      const orchestrator = new BrdAgentOrchestrator();
+      const initialState = createInitialState(brdText, "Uploaded Document", "text/plain", brdText.length);
+      
+      const finalState = await orchestrator.run(initialState, (updatedState) => {
+        setAgentState(updatedState);
+      });
+
       clearTimeout(longTimer);
-      setGeneratedData(result);
-      setStatus('success');
+
+      if (finalState.isRejected) {
+        setError(`Document Rejected: ${finalState.rejectionReason || 'The uploaded file does not appear to be a valid BRD.'}`);
+        setStatus('error');
+      } else if (finalState.needsMoreDetail) {
+        setError(`More Detail Required: The document is too high-level. Please provide more functional requirements.`);
+        setStatus('error');
+      } else if (finalState.status === 'failed') {
+        setError('Agent failed to complete the analysis. Please check the logs.');
+        setStatus('error');
+      } else {
+        setGeneratedData(finalState.data);
+        setStatus('success');
+      }
     } catch (err) {
       clearTimeout(longTimer);
       console.error(err);
@@ -50,6 +71,7 @@ const App: React.FC = () => {
     setGeneratedData(null);
     setStatus('idle');
     setError(null);
+    setAgentState(null);
   };
 
   const renderContent = () => {
@@ -81,11 +103,12 @@ const App: React.FC = () => {
               isLoading={status === 'analyzing'}
             />
             {status === 'analyzing' && (
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center w-full">
                 <ProgressIndicator />
+                {agentState && <AgentLogView logs={agentState.logs} />}
                 {isTakingLong && (
                   <p className="mt-4 text-amber-600 animate-pulse font-medium">
-                    This is taking longer than usual. Please wait, or refresh if it takes more than 2 minutes.
+                    This is taking longer than usual. The agent is performing deep reasoning.
                   </p>
                 )}
               </div>
