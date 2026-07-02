@@ -23,6 +23,26 @@ const generateExcelBase64 = (sheetsData: SheetData): string => {
     }
 };
 
+const extractJson = (text: string): string => {
+    // 1. Try to find ```json ... ```
+    const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+    if (jsonMatch && jsonMatch[1]) return jsonMatch[1].trim();
+
+    // 2. Try to find ``` ... ```
+    const codeMatch = text.match(/```\s*([\s\S]*?)\s*```/);
+    if (codeMatch && codeMatch[1]) return codeMatch[1].trim();
+
+    // 3. Try to find the first { and last }
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        return text.substring(firstBrace, lastBrace + 1).trim();
+    }
+
+    // 4. Return the whole text as a last resort
+    return text.trim();
+};
+
 export const generateProductArchitecture = async (brdText: string): Promise<GeneratedOutput> => {
     // Check multiple possible key names for maximum compatibility
     const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.VITE_API_KEY || process.env.VITE_API_KEY_BSA || process.env.GEMINI_API_KEY;
@@ -44,6 +64,7 @@ export const generateProductArchitecture = async (brdText: string): Promise<Gene
                 temperature: 0.0,
                 maxOutputTokens: 8192,
                 seed: 42,
+                responseMimeType: 'application/json',
             }
         });
 
@@ -69,11 +90,11 @@ export const generateProductArchitecture = async (brdText: string): Promise<Gene
         if (!rawText) {
             throw new Error("The AI returned an empty response. This might be a temporary API issue. Please try again.");
         }
-        const match = rawText.match(/```json\s*([\s\S]*?)\s*```/);
-        if (!match || !match[1]) {
-            throw new Error("Could not find a valid JSON code block in the response.");
+        
+        const jsonString = extractJson(rawText);
+        if (!jsonString || !jsonString.startsWith('{')) {
+            throw new Error("Could not extract a valid JSON object from the AI response.");
         }
-        const jsonString = match[1];
 
         let parsedData: GeneratedOutput;
         try {

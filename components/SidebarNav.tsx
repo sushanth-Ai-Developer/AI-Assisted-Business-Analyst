@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import type { GeneratedOutput } from '../types';
 import { DownloadIcon } from './icons/DownloadIcon';
 import { SummaryIcon, EpicsIcon, DiagramsIcon, ApiIcon } from './icons/NavIcons';
+import { Users } from 'lucide-react';
 import JSZip from 'jszip';
 
-type View = 'summary' | 'epics' | 'diagrams' | 'api';
+type View = 'summary' | 'epics' | 'raci' | 'diagrams' | 'api';
 
 interface SidebarNavProps {
   activeView: View;
@@ -94,6 +95,15 @@ ${data.summary.open_questions.map(q => `- ${q}`).join('\n')}
             });
             zip.file("user_stories.md", storiesContent);
 
+            // 2.5 RACI Chart
+            let raciContent = `# RACI Matrix - ${data.meta.title}\n\n`;
+            raciContent += `| Activity | Responsible | Accountable | Consulted | Informed |\n`;
+            raciContent += `| :--- | :--- | :--- | :--- | :--- |\n`;
+            data.raci_chart.forEach(item => {
+                raciContent += `| ${item.activity} | ${item.responsible} | ${item.accountable} | ${item.consulted} | ${item.informed} |\n`;
+            });
+            zip.file("raci_matrix.md", raciContent);
+
             // 3. Excel File
             if (data.files.excel_base64) {
                 zip.file("project_data.xlsx", data.files.excel_base64, { base64: true });
@@ -138,6 +148,7 @@ ${data.summary.open_questions.map(q => `- ${q}`).join('\n')}
     <div className="bg-white p-4 rounded-xl shadow-lg border border-slate-200 space-y-2">
       <NavItem icon={SummaryIcon} label="Summary & Insights" isActive={activeView === 'summary'} onClick={() => setActiveView('summary')} />
       <NavItem icon={EpicsIcon} label="Epics & Stories" isActive={activeView === 'epics'} onClick={() => setActiveView('epics')} />
+      <NavItem icon={Users} label="RACI Matrix" isActive={activeView === 'raci'} onClick={() => setActiveView('raci')} />
       <NavItem icon={DiagramsIcon} label="Visual Diagrams" isActive={activeView === 'diagrams'} onClick={() => setActiveView('diagrams')} />
       <NavItem icon={ApiIcon} label="API Specifications" isActive={activeView === 'api'} onClick={() => setActiveView('api')} />
       

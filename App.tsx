@@ -9,6 +9,7 @@ import { BrdAgentOrchestrator } from './src/agent/brdAgentOrchestrator';
 import { createInitialState } from './src/agent/workflowState';
 import { WorkflowState } from './src/agent/schema';
 import AgentLogView from './src/components/AgentLogView';
+import { SupportBot } from './src/components/SupportBot';
 
 type GenerationStatus = 'idle' | 'analyzing' | 'success' | 'error';
 
@@ -150,6 +151,7 @@ const App: React.FC = () => {
       <footer className="text-center p-4 text-slate-500 text-sm mt-8">
         Powered by Gemini API
       </footer>
+      <SupportBot />
     </div>
   );
 };

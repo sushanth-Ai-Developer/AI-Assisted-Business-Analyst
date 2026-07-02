@@ -5,6 +5,7 @@ export type AgentDecision =
   | 'EXTRACT_REQUIREMENTS'
   | 'GENERATE_EPICS'
   | 'GENERATE_USER_STORIES'
+  | 'GENERATE_RACI'
   | 'GENERATE_DIAGRAMS'
   | 'GENERATE_API_SPECS'
   | 'REQUEST_MORE_DETAIL'
@@ -46,6 +47,7 @@ export interface WorkflowState {
   hasRequirements: boolean;
   hasEpics: boolean;
   hasStories: boolean;
+  hasRaci: boolean;
   hasDiagrams: boolean;
   hasApiSpecs: boolean;
   hasExports: boolean;

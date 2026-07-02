@@ -5,13 +5,14 @@ import SummaryView from './SummaryView';
 import EpicsView from './EpicsView';
 import ApiDocsView from './ApiDocsView';
 import DiagramsView from './DiagramsView';
+import RaciView from './RaciView';
 
 interface DashboardLayoutProps {
   data: GeneratedOutput;
   onReset: () => void;
 }
 
-type View = 'summary' | 'epics' | 'diagrams' | 'api';
+type View = 'summary' | 'epics' | 'raci' | 'diagrams' | 'api';
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ data, onReset }) => {
   const [activeView, setActiveView] = useState<View>('summary');
@@ -19,9 +20,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ data, onReset }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'summary':
-        return <SummaryView summary={data.summary} meta={data.meta} epics={data.epics} />;
+        return <SummaryView summary={data.summary} meta={data.meta} epics={data.epics} raciCount={data.raci_chart.length} />;
       case 'epics':
         return <EpicsView epics={data.epics} />;
+      case 'raci':
+        return <RaciView raci={data.raci_chart} />;
       case 'diagrams':
         return <DiagramsView visuals={data.visuals} />;
       case 'api':

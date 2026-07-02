@@ -9,6 +9,7 @@ Your job is to look at the current state of a Business Requirements Document (BR
 - EXTRACT_REQUIREMENTS: Pull out specific functional and non-functional requirements.
 - GENERATE_EPICS: Group requirements into high-level Epics.
 - GENERATE_USER_STORIES: Create detailed INVEST-compliant user stories for the Epics.
+- GENERATE_RACI: Create a Responsibility Assignment Matrix (RACI Chart) for the project.
 - GENERATE_DIAGRAMS: Create Mermaid.js diagrams (Flow, Sequence, Dependency).
 - GENERATE_API_SPECS: Create OpenAPI specifications if the BRD has technical/API needs.
 - REQUEST_MORE_DETAIL: If the BRD is too thin or vague to proceed.
@@ -24,6 +25,7 @@ Your job is to look at the current state of a Business Requirements Document (BR
    - If no summary -> SUMMARIZE_BRD.
    - If no epics -> GENERATE_EPICS.
    - If epics exist but no stories -> GENERATE_USER_STORIES.
+   - If stories exist but no RACI chart -> GENERATE_RACI.
    - If stories exist but no diagrams (and relevant) -> GENERATE_DIAGRAMS.
    - If stories exist but no API specs (and relevant) -> GENERATE_API_SPECS.
    - If all relevant artifacts generated -> GENERATE_EXPORTS.

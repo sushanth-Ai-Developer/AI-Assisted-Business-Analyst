@@ -5,6 +5,7 @@ interface SummaryViewProps {
   summary: Summary;
   meta: Meta;
   epics: Epic[];
+  raciCount: number;
 }
 
 const InfoCard: React.FC<{title: string; children: React.ReactNode}> = ({ title, children }) => (
@@ -14,7 +15,7 @@ const InfoCard: React.FC<{title: string; children: React.ReactNode}> = ({ title,
     </div>
 );
 
-const SummaryView: React.FC<SummaryViewProps> = ({ summary, meta, epics }) => {
+const SummaryView: React.FC<SummaryViewProps> = ({ summary, meta, epics, raciCount }) => {
   const storyCount = epics.reduce((acc, epic) => acc + epic.stories.length, 0);
 
   return (
@@ -35,6 +36,10 @@ const SummaryView: React.FC<SummaryViewProps> = ({ summary, meta, epics }) => {
             <div className="bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100 text-center">
               <div className="text-2xl font-bold text-indigo-700">{storyCount}</div>
               <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Stories</div>
+            </div>
+            <div className="bg-emerald-50 px-4 py-2 rounded-lg border border-emerald-100 text-center">
+              <div className="text-2xl font-bold text-emerald-700">{raciCount}</div>
+              <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">RACI Items</div>
             </div>
           </div>
         </div>

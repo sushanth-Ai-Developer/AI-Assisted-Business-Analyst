@@ -24,6 +24,7 @@ export class BrdDecisionRouter {
       hasRequirements: state.hasRequirements,
       hasEpics: state.hasEpics,
       hasStories: state.hasStories,
+      hasRaci: state.hasRaci,
       hasDiagrams: state.hasDiagrams,
       hasApiSpecs: state.hasApiSpecs,
       hasExports: state.hasExports,
@@ -47,7 +48,20 @@ export class BrdDecisionRouter {
       const text = response.text;
       if (!text) throw new Error("Empty response from Router LLM");
       
-      return JSON.parse(text) as DecisionOutput;
+      // Robust extraction in case the model still wraps in markdown
+      let jsonString = text.trim();
+      const jsonMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+      if (jsonMatch && jsonMatch[1]) {
+        jsonString = jsonMatch[1].trim();
+      } else {
+        const firstBrace = jsonString.indexOf('{');
+        const lastBrace = jsonString.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+          jsonString = jsonString.substring(firstBrace, lastBrace + 1).trim();
+        }
+      }
+
+      return JSON.parse(jsonString) as DecisionOutput;
     } catch (error) {
       console.error("Router Error:", error);
       throw error;

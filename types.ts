@@ -107,10 +107,19 @@ export interface Files {
   };
 }
 
+export interface RaciItem {
+  activity: string;
+  responsible: string;
+  accountable: string;
+  consulted: string;
+  informed: string;
+}
+
 export interface GeneratedOutput {
   meta: Meta;
   summary: Summary;
   epics: Epic[];
+  raci_chart: RaciItem[];
   ui_blueprint: UiBlueprint;
   visuals: Visuals;
   api_docs: ApiDocs;

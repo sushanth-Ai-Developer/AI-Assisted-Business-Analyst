@@ -23,6 +23,7 @@ export class BrdToolExecutor {
       case 'SUMMARIZE_BRD':
       case 'GENERATE_EPICS':
       case 'GENERATE_USER_STORIES':
+      case 'GENERATE_RACI':
       case 'GENERATE_DIAGRAMS':
       case 'GENERATE_API_SPECS':
         // For now, we reuse the main generator but we could make it more granular
@@ -61,7 +62,19 @@ export class BrdToolExecutor {
       config: { responseMimeType: 'application/json' }
     });
 
-    const result = JSON.parse(response.text);
+    let jsonString = response.text.trim();
+    const jsonMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    if (jsonMatch && jsonMatch[1]) {
+      jsonString = jsonMatch[1].trim();
+    } else {
+      const firstBrace = jsonString.indexOf('{');
+      const lastBrace = jsonString.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        jsonString = jsonString.substring(firstBrace, lastBrace + 1).trim();
+      }
+    }
+
+    const result = JSON.parse(jsonString);
     return {
       isValidated: true,
       isRejected: !result.isValidBRD,
@@ -78,6 +91,7 @@ export class BrdToolExecutor {
       hasSummary: !!data.summary,
       hasEpics: data.epics.length > 0,
       hasStories: data.epics.some(e => e.stories.length > 0),
+      hasRaci: data.raci_chart.length > 0,
       hasDiagrams: !!data.visuals,
       hasApiSpecs: !!data.api_docs,
       status: 'completed' // In this simple version, full generation completes the task
